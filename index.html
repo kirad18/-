@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="reset.css">
+<style>
+    *{
+        box-sizing: border-box;
+    }
+    body{
+        background-color: #fce7f0;
+        color: #222222;
+    }
+    .logo{
+        width: 1200px;
+        margin: auto;
+        display: flex;
+        justify-content: center;
+    }
+    .logo img{
+        width: 350px;
+    }
+    .wrap{
+         /* max-width: 1200px;
+        display: flex;
+        margin: auto;
+        background-color: #b5b5b566;
+        padding: 30px;
+        border-radius: 10px; */
+    max-width: 1200px;
+    background-color: #b5b5b566;
+    display: block;
+    flex-direction: column;
+    margin: auto; 
+    position: relative;
+}
+    .cart{
+        display: flex; 
+    }
+    .cart img{
+        max-width: 300px;
+        height: 300px;
+        margin: 25px 25px 0 25px;
+        border: 2px solid #f46fa8;
+    }
+    h1{
+        font-size: 24px;
+        text-align: center;
+    }
+    .product-data{
+        display: block;
+        text-align: center;
+        font-size: 16px;
+    }
+    .product-data button{
+        width: 25px;
+        height: 25px;
+        font-size: 20px;
+        border-radius: 3px;
+        margin: 0 10px;
+        background-color: #fe94a9;
+        border: none;
+        text-align: center;
+    }
+    .clear {
+        width: 40px;
+        height: 25px;
+        font-size: 14px;
+        border-radius: 3px;
+        margin: 20px 10px;
+        background-color: #fe94a9;
+        border: none;
+        position: relative;
+        left: 120px
+    }
+   
+    .price{
+        text-align: center;
+    }
+    .total{
+        width: 100%;
+        padding: 20px;
+        margin-top: 5%;
+        border-top: 1px solid  #fce7f0;      
+    }
+    .totalprice{
+        display: block;
+        font-size: 30px;
+        font-weight:700;
+        text-align: right;
+    }
+    .pay{
+        text-align: right;
+    }
+    .pay button{
+        width: 100%;
+        height: 40px;
+        border: 0;
+        font-size: 20px;
+        font-weight: 800;
+        border-radius: 10px;
+        background-color: #fe94a9;    
+    }
+
+
+</style>
+</head>
+<body>
+    <div id="app">
+
+        <div class="logo">
+            <img src="img/2.jpg" alt="">
+        </div> 
+    
+        <div class="wrap">
+            <div class="cart">
+    
+                <div v-for="(item,index) in product" :key="item.id">
+                    <img :src="item.imgUrl" alt="item.title">
+    
+                    <div class="product-data"> 
+                        <h1>{{item.name}}</h1>
+                        <p class="price">${{item.price}}</p>
+                        <span>
+                            <button @click="decrease(item)">-</button>
+                            {{item.count}}
+                            <button @click="add(item)">+</button> 
+                        </span>   
+
+                    </div>  
+                   
+                </div>
+    
+            </div>
+    
+
+            <div class="total" v-if="product.length > 0">
+
+                <div class="totalprice">${{amount}}</div> 
+                <div class="pay">
+                    <button>結帳</button>
+                </div> 
+            </div> 
+    
+        </div>
+    </div>
+    
+    
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        Vue.createApp({
+            data(){
+                return{
+                    product: [
+                 
+                    {
+                    id: 1,
+                    name: '小狼',
+                    imgUrl: 'https://i.pinimg.com/564x/7e/49/e7/7e49e7f4511a361f1d3a6be94d4f275b.jpg',
+                    price:'7990',
+                    count: 1
+                    },
+                    {
+                    id: 2,
+                    name: '小櫻',
+                    imgUrl: 'https://i.pinimg.com/564x/cc/3d/85/cc3d855aacff9c9a8721212883b22443.jpg',
+                    price:'3990',
+                    count: 1
+                    },
+                    {
+                    id: 3,
+                    name: '知世',
+                    imgUrl: 'https://i.pinimg.com/564x/5a/ce/eb/5aceeb99339aa4ea49803084c2e8406b.jpg',
+                    price:'4990',
+                    count: 1
+                    },
+                    {
+                    id: 3,
+                    name: '小櫻2',
+                    imgUrl: 'https://i.pinimg.com/564x/26/04/f5/2604f5baaa89a957094d90e83a5cf4e9.jpg',
+                    price:'4990',
+                    count: 1
+                    },
+                      
+                    ]
+                }
+            },
+            computed: {
+                amount() {
+                return this.product.reduce((total, item) => {
+                return total + (item.price * item.count);
+                }, 0);
+            }
+            },
+            methods: {
+                decrease(item){
+                    if(item.count > 1){
+                    item.count--;
+                    }else if (item.count === 1){
+                        const index = this.product.indexOf(item);
+                        if (index !== -1) {
+                        this.product.splice(index, 1);}
+                    }
+                },
+                add(item){
+                    item.count++
+                },
+                deleteItem(item,index){
+                    this.product.splice(index, 1)
+                },
+                list(price, count){
+                    return price*count
+                },
+               
+            }
+        }).mount("#app");
+    </script>
+</body>
+</html>
+
